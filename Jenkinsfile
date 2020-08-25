@@ -28,7 +28,7 @@ pipeline{
           steps
             {
            echo "building the docker image "
-           sh 'docker build -t kumarartech/hello:1.0 .'
+           sh 'docker build -t kumarartech/hello:1.0 -f Dockerfile'
             }
             }
 		
