@@ -24,11 +24,7 @@ pipeline{
                 }
             }
         } 
-        stage('Deploying into tomcat'){
-            steps{
-                sh ' sudo docker container restart tomcat'
-                echo 'Deployed successfully'
-            }
-        }
+        
+        
     }
 }
