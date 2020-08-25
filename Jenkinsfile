@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage('checkout'){
             steps{
-               git 'https://github.com/kumarrajacse/maven-project.git'
+               git 'https://github.com/kumarrajacse/dockerimage.git'
             }
         }
         stage('Build'){
