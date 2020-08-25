@@ -23,8 +23,26 @@ pipeline{
                     sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
                 }
             }
-        } 
-        
-        
+			}
+        stage ('building docker image'){
+          steps
+            {
+           echo "building the docker image "
+           sh 'docker build -t kumarartech/hello:1.0 .'
+            }
+            }
+		
+		stage('Push the docker image to hub'){
+		steps
+		{
+		echo "login into docker hub "
+		withCredentials([usernamePassword(credentialsId: 'DockerCred', passwordVariable: 'passwd', usernameVariable: 'username')]) 
+		{
+		sh 'docker login -u ${username} -p ${passwd} '
+		}
+		sh 'docker push kumarartech/hello:1.0 '
+		}
+	    }
+		        
     }
 }
