@@ -1,4 +1,9 @@
 pipeline{
+     environment {
+    registry = "kumarartech/venky"
+    registryCredential = 'DockerCred'
+    dockerImage = ''
+  }
     agent any
     stages{
         stage('checkout'){
@@ -17,32 +22,27 @@ pipeline{
                 }
             }
         }
-        //stage('SonarQube analysis') {
-          //  steps{
-            //    withSonarQubeEnv('sonar'){
-              //      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
-                //}
-            //}
-			//}
-        stage ('building docker image'){
-          steps
-            {
-           echo "building the docker image "
-           sh 'docker build -t kumarartech/hello:1.0 -f ./Dockerfile'
-            }
-            }
-		
-		stage('Push the docker image to hub'){
-		steps
-		{
-		echo "login into docker hub "
-		withCredentials([usernamePassword(credentialsId: 'DockerCred', passwordVariable: 'passwd', usernameVariable: 'username')]) 
-		{
-		sh 'docker login -u ${username} -p ${passwd}'
-		}
-		sh 'docker push kumarartech/hello:1.0'
-		}
-	    }
+        stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+        }
+      }
+    }
+    stage('Deploy Image') {
+      steps{
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+          }
+        }
+      }
+    }
+    stage('Remove Unused docker image') {
+      steps{
+        sh "docker rmi $registry:$BUILD_NUMBER"
+      }
+    }
 		        
     }
 }
