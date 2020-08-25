@@ -17,13 +17,13 @@ pipeline{
                 }
             }
         }
-        /*stage('SonarQube analysis') {
-            steps{
-                withSonarQubeEnv('sonar'){
-                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
-                }
-            }
-			}*\
+        //stage('SonarQube analysis') {
+          //  steps{
+            //    withSonarQubeEnv('sonar'){
+              //      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
+                //}
+            //}
+			//}
         stage ('building docker image'){
           steps
             {
@@ -38,9 +38,9 @@ pipeline{
 		echo "login into docker hub "
 		withCredentials([usernamePassword(credentialsId: 'DockerCred', passwordVariable: 'passwd', usernameVariable: 'username')]) 
 		{
-		sh 'docker login -u ${username} -p ${passwd} '
+		sh 'docker login -u ${username} -p ${passwd}'
 		}
-		sh 'docker push kumarartech/hello:1.0 '
+		sh 'docker push kumarartech/hello:1.0'
 		}
 	    }
 		        
