@@ -43,6 +43,13 @@ pipeline{
 		sh 'docker push kumarartech/tomcat:$BUILD_NUMBER'
 		}
 	    }
+	    stage('Deployment in cluster'){
+		    steps('cluster'){
+			    withKubeConfig(credentialsId: 'kubernetes') {
+                         sh 'kubectl get nodes -o wide'
+                    }
+	         }
+		}
 		        
     }
 }
